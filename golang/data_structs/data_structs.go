@@ -1,72 +1,76 @@
 package data_structs
 
 type Item struct {
-	value interface{}
+	Value interface{}
 }
 
 type Stack struct {
-	items []*Item
-	count int
+	Items []*Item
+	Count int
 }
 
 func NewStack() *Stack {
 	return &Stack{
-		items: []*Item{},
-		count: 0,
+		Items: []*Item{},
+		Count: 0,
 	}
 }
 
 func (s *Stack) Pop() *Item {
-	e := (s.items)[s.count]
-	s.items = s.items[0:s.count]
-	s.count--
+	e := (s.Items)[s.Count]
+	s.Items = s.Items[0:s.Count]
+	s.Count--
 	return e
 }
 
 func (s *Stack) Push(data *Item) {
-	s.items = append(s.items, data)
-	s.count++
+	s.Items = append(s.Items, data)
+	s.Count++
 }
 
-type QueueNode struct {
-	value interface{}
-	next  *QueueNode
+type ListNode struct {
+	Value interface{}
+	Next  *ListNode
 }
 
 type Queue struct {
-	front  *QueueNode
-	back   *QueueNode
-	length int
+	Front  *ListNode
+	Back   *ListNode
+	Length int
 }
 
 func NewQueue() *Queue {
 	return &Queue{
-		front:  nil,
-		back:   nil,
-		length: 0,
+		Front:  nil,
+		Back:   nil,
+		Length: 0,
 	}
 }
-func (q *Queue) Push(node *QueueNode) {
-	if q.length == 0 {
-		q.front = node
-		q.back = node
-	} else {
-		q.back.next = node
-		q.back = node
+func (q *Queue) Push(value interface{}) {
+	node := &ListNode{
+		Value: value,
+		Next:  nil,
 	}
-	q.length++
+	if q.Length == 0 {
+		q.Front = node
+		q.Back = node
+	} else {
+		q.Back.Next = node
+		q.Back = node
+	}
+	q.Length++
 }
 
-func (q *Queue) Unshift() *QueueNode {
-	removedNode := q.front
-	if q.length == 0 {
+func (q *Queue) Unshift() *ListNode {
+	removedNode := q.Front
+	if q.Length == 0 {
 		return nil
 	}
-	if q.length == 1 {
-		q.back = nil
+	if q.Length == 1 {
+		q.Back = nil
 	}
-	q.front = q.front.next
-	q.length--
+	q.Front = q.Front.Next
+	q.Length--
 	return removedNode
 
 }
