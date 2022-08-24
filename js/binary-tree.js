@@ -47,7 +47,6 @@ const breadthFirstPrint = (root) => {
         }
     }
 }
-
 // breadthFirstPrint(a);
 
 const breadthFirstSearch = (root, target) => {
@@ -140,7 +139,7 @@ const inOrder = (curr) => {
 
 }
 
-// preOrder(a);
+preOrder(a);
 // postOrder(a);
 // inOrder(a);
 

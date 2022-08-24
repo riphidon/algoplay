@@ -1,4 +1,4 @@
-package generics
+package datastructs
 
 import (
 	"fmt"

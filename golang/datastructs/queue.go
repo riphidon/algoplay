@@ -1,33 +1,35 @@
-package generics
+package datastructs
 
 import "fmt"
 
-type ListNode[T string | int] struct {
+type QueueNode[T any] struct {
 	Value T
-	Next  *ListNode[T]
+	Next  *QueueNode[T]
 }
 
-type queue[T string | int] struct {
-	Front   func() *ListNode[T]
-	Back    func() *ListNode[T]
-	Push    func(T)
-	Unshift func() *T
+type queue[T any] struct {
+	Front   func() *QueueNode[T]
+	Back    func() *QueueNode[T]
+	Enqueue func(T)
+	Dequeue func() *T
+	Len     func() int
 	Print   func()
 }
 
-func Queue[T string | int]() *queue[T] {
-	var front *ListNode[T] = nil
-	var back *ListNode[T] = nil
+// Queue returns a queue type object container.
+func Queue[T any]() *queue[T] {
+	var front *QueueNode[T] = nil
+	var back *QueueNode[T] = nil
 	length := 0
 	return &queue[T]{
-		Front: func() *ListNode[T] {
+		Front: func() *QueueNode[T] {
 			return front
 		},
-		Back: func() *ListNode[T] {
+		Back: func() *QueueNode[T] {
 			return back
 		},
-		Push: func(data T) {
-			node := &ListNode[T]{
+		Enqueue: func(data T) {
+			node := &QueueNode[T]{
 				Value: data,
 				Next:  nil,
 			}
@@ -40,7 +42,7 @@ func Queue[T string | int]() *queue[T] {
 			}
 			length++
 		},
-		Unshift: func() *T {
+		Dequeue: func() *T {
 			removed := front
 			if length == 0 {
 				return nil
@@ -65,6 +67,9 @@ func Queue[T string | int]() *queue[T] {
 				fmt.Println("Queue is empty")
 			}
 
+		},
+		Len: func() int {
+			return length
 		},
 	}
 }
