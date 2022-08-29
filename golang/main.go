@@ -19,15 +19,18 @@ func linkedListPlay() {
 	b := datastructs.NewLink[string]("ni")
 	c := datastructs.NewLink[string]("san")
 	d := datastructs.NewLink[string]("yon")
+	e := datastructs.NewLink[string]("go")
 
 	list.Append(a)
 	list.Append(b)
 	list.Append(c)
 	list.Insert(b, d)
-	list.Print()
+	list.Append(e)
 	list.Remove((a))
-	fmt.Println("---------------------------")
 	list.Print()
+	fmt.Println("---------------------------")
+	list.Reverse()
+	// list.Print()
 
 }
 

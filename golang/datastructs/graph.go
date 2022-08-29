@@ -9,15 +9,15 @@ type value interface {
 	string | int
 }
 
-type arr[T value] []node[T]
+type arr[T value] []GraphNode[T]
 
-func (a *arr[T]) shift() node[T] {
+func (a *arr[T]) shift() GraphNode[T] {
 	elt := (*a)[0]
 	*a = (*a)[1:]
 	return elt
 }
 
-func (a *arr[T]) pop() node[T] {
+func (a *arr[T]) pop() GraphNode[T] {
 	i := len((*a)) - 1
 	elt := (*a)[i]
 	*a = (*a)[0:i]
@@ -28,21 +28,21 @@ func (a *arr[T]) pop() node[T] {
 *          	  NODE
 ***********************************/
 
-type node[T value] struct {
+type GraphNode[T value] struct {
 	value     T
-	edgesList []*node[T]
+	edgesList []*GraphNode[T]
 }
 
-func newNode[T value](val T) node[T] {
-	return node[T]{value: val, edgesList: []*node[T]{}}
+func newNode[T value](val T) GraphNode[T] {
+	return GraphNode[T]{value: val, edgesList: []*GraphNode[T]{}}
 }
 
-func connect[T value](node *node[T], new *node[T]) {
-	node.edgesList = append(node.edgesList, new)
-	new.edgesList = append(new.edgesList, node)
+func (n *GraphNode[T])Connect(new *GraphNode[T]) {
+	n.edgesList = append(n.edgesList, new)
+	new.edgesList = append(new.edgesList, n)
 }
 
-func (n *node[T]) findAdjacents() {
+func (n *GraphNode[T]) findAdjacents() {
 	adj := []T{}
 	for _, v := range n.edgesList {
 		adj = append(adj, v.value)
@@ -50,7 +50,7 @@ func (n *node[T]) findAdjacents() {
 	fmt.Println(adj)
 }
 
-func (n *node[T]) printEdges() []T {
+func (n *GraphNode[T]) printEdges() []T {
 	edges := []T{}
 	for _, v := range n.edgesList {
 		edges = append(edges, v.value)
@@ -62,7 +62,7 @@ func (n *node[T]) printEdges() []T {
 *          	 GRAPH
 ***********************************/
 type graph[T value] struct {
-	nodes []node[T]
+	nodes []GraphNode[T]
 }
 
 func (g *graph[T]) print() {
@@ -72,7 +72,7 @@ func (g *graph[T]) print() {
 	}
 }
 
-func (g *graph[T]) add(node node[T]) {
+func (g *graph[T]) add(node GraphNode[T]) {
 	g.nodes = append(g.nodes, node)
 }
 
@@ -109,7 +109,7 @@ func (g *graph[T]) breadthFirstPrint() {
 
 }
 
-func recursiveBreadthFirst[T value](node node[T], visited map[T]bool) {
+func recursiveBreadthFirst[T value](node GraphNode[T], visited map[T]bool) {
 	if visited == nil {
 		visited = map[T]bool{}
 	}
@@ -145,7 +145,7 @@ func (g *graph[T]) depthFirstPrint() {
 
 }
 
-func shortestPath[T value](start, end node[T]) {
+func shortestPath[T value](start, end GraphNode[T]) {
 	queue := arr[T]{start}
 	visited := map[T]*T{
 		start.value: nil,
@@ -168,7 +168,7 @@ func shortestPath[T value](start, end node[T]) {
 
 }
 
-func reconstructPath[T value](nodeList map[T]*T, endNode node[T]) {
+func reconstructPath[T value](nodeList map[T]*T, endNode GraphNode[T]) {
 	current := &endNode.value
 	pathStr := ""
 	for current != nil {
@@ -184,9 +184,9 @@ func reconstructPath[T value](nodeList map[T]*T, endNode node[T]) {
 	fmt.Println(pathStr)
 }
 
-func main() {
+func graphPlay() {
 	gi := graph[int]{
-		nodes: []node[int]{},
+		nodes: []GraphNode[int]{},
 	}
 
 	nodeA := newNode(8)
@@ -195,11 +195,11 @@ func main() {
 	nodeD := newNode(5)
 	nodeE := newNode(12)
 
-	connect(&nodeA, &nodeB)
-	connect(&nodeA, &nodeD)
-	connect(&nodeB, &nodeC)
-	connect(&nodeC, &nodeD)
-	connect(&nodeD, &nodeE)
+	nodeA.Connect(&nodeB)
+	nodeA.Connect(&nodeD)
+	nodeB.Connect(&nodeC)
+	nodeC.Connect(&nodeD)
+	nodeD.Connect(&nodeE)
 
 	gi.add(nodeA)
 	gi.add(nodeB)
@@ -221,19 +221,19 @@ func main() {
 	MCO := newNode("MCO")
 	PBI := newNode("PBI")
 
-	connect(&DFW, &LAX)
-	connect(&DFW, &JFK)
-	connect(&LAX, &HNL)
-	connect(&LAX, &EWR)
-	connect(&LAX, &SAN)
-	connect(&JFK, &BOS)
-	connect(&JFK, &MIA)
-	connect(&MIA, &MCO)
-	connect(&MIA, &PBI)
-	connect(&MCO, &PBI)
+	DFW.Connect(&LAX)
+	DFW.Connect(&JFK)
+	LAX.Connect(&HNL)
+	LAX.Connect(&EWR)
+	LAX.Connect(&SAN)
+	JFK.Connect(&BOS)
+	JFK.Connect(&MIA)
+	MIA.Connect(&MCO)
+	MIA.Connect(&PBI)
+	MCO.Connect(&PBI)
 
 	gs := graph[string]{
-		nodes: []node[string]{
+		nodes: []GraphNode[string]{
 			DFW,
 			JFK,
 			LAX,

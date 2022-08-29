@@ -81,6 +81,18 @@ func (l *LinkedList[T]) Remove(toRemove *ListNode[T]) {
 	}
 }
 
+func (l *LinkedList[T]) Reverse() {
+	var previous *ListNode[T] = nil
+	cn := l.Head
+	for cn != nil {
+		next := cn.Next
+		cn.Next = previous
+		previous = cn
+		cn = next
+	}
+	l.Head = previous
+}
+
 func (l *LinkedList[T]) Print() {
 	if ok := l.isNotEmpty(); ok {
 		node := l.Head
