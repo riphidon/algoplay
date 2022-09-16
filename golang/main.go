@@ -10,9 +10,6 @@ func main() {
 	treeNodePlay()
 	stackPlay()
 	linkedListPlay()
-
-	fmt.Println(NthPrime(1))
-
 }
 
 func linkedListPlay() {
